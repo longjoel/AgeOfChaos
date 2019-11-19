@@ -1,0 +1,1 @@
+dosbox.exe -conf dosbox.config
