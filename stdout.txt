@@ -5,3 +5,9 @@ CONFIG: Loading primary settings from config file dosbox.config
 MIDI: Opened device:win32
 DOSBox has switched to max cycles, because of the setting: cycles=auto.
 If the game runs too fast, try a fixed cycles amount in DOSBox's options.
+SHELL: Redirect output to tmp.txt
+SHELL: Redirect output to tmp.txt
+SHELL: Redirect output to tmp.txt
+SHELL: Redirect output to tmp.txt
+SHELL: Redirect output to tmp.txt
+SHELL: Redirect output to

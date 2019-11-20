@@ -1,1 +1,1 @@
-"Dosbox/dosbox.exe" -noconsole -conf "dosbox.config" -c "gcc a:\main.c a:\video.c -o b:\main.exe" -c "exit"
+"Dosbox/dosbox.exe" -noconsole -conf "dosbox.config" -c "make -fa:/makefile main.exe" 
