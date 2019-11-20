@@ -1,0 +1,7 @@
+DOSBox version SVN
+Copyright 2002-2019 DOSBox Team, published under GNU GPL.
+---
+CONFIG: Loading primary settings from config file dosbox.config
+MIDI: Opened device:win32
+DOSBox has switched to max cycles, because of the setting: cycles=auto.
+If the game runs too fast, try a fixed cycles amount in DOSBox's options.

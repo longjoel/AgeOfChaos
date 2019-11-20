@@ -1,1 +1,1 @@
-dosbox.exe -conf dosbox.config
+dosbox.exe -conf dosbox.config %1
