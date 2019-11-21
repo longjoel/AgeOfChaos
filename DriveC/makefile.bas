@@ -1,5 +1,5 @@
 ' Step 1: grab all .c files
-SHELL "dir a:\*.c /b /s > tmp.txt"
+SHELL "dir /s /b /a:d a:\*.c > tmp.txt"
 args$ = ""
 
 OPEN "tmp.txt" FOR INPUT AS #1
