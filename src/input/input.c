@@ -14,7 +14,7 @@ BOOL PollKeyboardState(BYTE key)
     switch (key)
     {
     case KBD_UP:
-    case KBD_DN:
+    case KBD_DOWN:
     case KBD_LEFT:
     case KBD_RIGHT:
 
@@ -26,14 +26,14 @@ BOOL PollKeyboardState(BYTE key)
             case 72:
                 return (key == KBD_UP);
             case 75:
-                return (key == KBD_DN);
+                return (key == KBD_DOWN);
             case 77:
                 return (key == KBD_RIGHT);
             case 80:
                 return (key == KBD_LEFT);
             }
         }
-        return false;
+        return FALSE;
         break;
 
     default:

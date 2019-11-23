@@ -1,7 +1,7 @@
 #ifndef __AOC_INPUT_H__
 #define __AOC_INPUT_H__
 
-#include "../sys/sys.h";
+#include "../sys/sys.h"
 
 #define LMB (0x01)
 #define RMB (0x02)
@@ -24,10 +24,6 @@ typedef struct _mouse_state {
     unsigned int y;
     BYTE buttons;
 } mouse_state_t;
-
-typedef struct _keyboard_state {
-    BYTE[] keys;
-} keyboard_state_t;
 
 void PollMouseState(mouse_state_t *mouseState);
 
