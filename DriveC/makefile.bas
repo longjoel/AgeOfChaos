@@ -12,7 +12,7 @@ DO WHILE NOT EOF(1)
 LOOP
 CLOSE #1
 PRINT args$
-SHELL "gcc " + args$ + " -o b:\game.exe"
+SHELL "gcc -std=gnu99 " + args$ + " -o b:\game.exe"
 SHELL "del TMP.txt"
 
 

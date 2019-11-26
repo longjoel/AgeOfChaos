@@ -4,7 +4,13 @@
 #include <conio.h>
 #include <stdio.h>
 
-void PollMouseState(mouse_state_t *mouseState)
+struct _mouse_state{
+    unsigned int x;
+    unsigned int y;
+    BYTE buttons;
+} ;
+
+void PollMouseState(mouse_state *mouseState)
 {
 }
 
@@ -20,7 +26,7 @@ BOOL PollKeyboardState(BYTE key)
 
         if (!getch())
         {
-            int nextCh = getch();
+            BYTE nextCh = getch();
             switch (nextCh)
             {
             case 72:

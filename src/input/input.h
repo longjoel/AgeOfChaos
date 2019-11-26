@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __AOC_INPUT_H__
 #define __AOC_INPUT_H__
 
@@ -19,13 +20,9 @@
 #define KBD_ESC (0x1B)  /* escape */
 #define KBD_RET (0x0D)  /* return */
 
-typedef struct _mouse_state {
-    unsigned int x;
-    unsigned int y;
-    BYTE buttons;
-} mouse_state_t;
+typedef struct _mouse_state  mouse_state;
 
-void PollMouseState(mouse_state_t *mouseState);
+void PollMouseState(mouse_state *mouseState);
 
 BOOL PollKeyboardState(BYTE key);
 

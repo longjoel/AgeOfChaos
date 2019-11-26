@@ -21,6 +21,8 @@
 #include <dos.h>
 #include <sys/nearptr.h>
 
+#include "video/video.h"
+
 #define VIDEO_INT           0x10      /* the BIOS video interrupt. */
 #define WRITE_DOT           0x0C      /* BIOS func to plot a pixel. */
 #define SET_MODE            0x00      /* BIOS func to set the video mode. */
@@ -85,7 +87,7 @@ void plot_pixel_fast(int x,int y,byte color)
  *    directly writing to video memory.                                   *
  **************************************************************************/
 
-int main()
+int xmain()
 {
   int x,y,color;
   float t1,t2;
@@ -137,5 +139,13 @@ int main()
 
   __djgpp_nearptr_disable();
 
+  return 0;
+}
+
+
+int main(){
+ InitVideo();
+
+CleanupVideo();
   return 0;
 }
