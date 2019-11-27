@@ -4,10 +4,7 @@
 
 #include "../sys/sys.h"
 
-typedef struct _video_system_vars {
-    BYTE *vga;
-    BYTE *backBuffer;
-} video_system_vars;
+typedef struct _video_system_vars video_system_vars;
 
 typedef struct _rect {
     UINT32 x;
