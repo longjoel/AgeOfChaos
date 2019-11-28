@@ -15,14 +15,18 @@ __dpmi_int(0x10, &regs);
 
 
     VideoInit();
+
+    for(int c = 0; c < 256; c++){
+        SetPallet(c,c,c,c);
+    }
     
     for(;;){
         for(int q = 0; q < 255; q++){
-        for(int i = 0; i < 320; i++){
-            for(int j = 0; j < 200; j++){
-                SetPixel(i,j, ((i+q)*(i+j))%255);
+            for(int i = 0; i < 320; i++){
+                for(int j = 0; j < 200; j++){
+                    SetPixel(i,j, (uint8_t)(((i%150)+(j%150)+q * (i/2*j/2))%255));
+                }
             }
-        }
         SwapBuffers();
     }}
 

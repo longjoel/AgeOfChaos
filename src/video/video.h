@@ -15,3 +15,5 @@ void VideoCleanup();
 void SwapBuffers();
 
 void SetPixel(uint16_t x, uint16_t y, uint8_t c);
+
+void SetPallet(uint8_t index, uint8_t r, uint8_t g, uint8_t b);
