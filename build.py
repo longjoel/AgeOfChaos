@@ -18,7 +18,7 @@ def build_code():
     cargs = ['-I/usr/local/djgpp/i586-pc-msdosdjgpp/sys-include']
     libs = ['-L/usr/local/djgpp/i586-pc-msdosdjgpp/lib/','-lm']
     output = ['-o', 'bin/aoc.exe']
-    files = glob.glob('src/**/*.c', recursive=True)
+    files = glob.glob('src/**/*.cpp', recursive=True)
 
     args = [cc, *cargs, *files, *output, *libs ]
 
