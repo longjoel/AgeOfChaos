@@ -11,3 +11,7 @@ typedef struct _video_context {
 void VideoInit();
 
 void VideoCleanup();
+
+void SwapBuffers();
+
+void SetPixel(uint16_t x, uint16_t y, uint8_t c);
