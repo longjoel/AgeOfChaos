@@ -54,5 +54,12 @@ void SetPallet(uint8_t index, uint8_t r, uint8_t g, uint8_t b){
     outp(PALETTE_DATA,r);   
     outp(PALETTE_DATA,g);
     outp(PALETTE_DATA,b);   
+}
 
+
+void GetPallet(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b){
+ outp(PALETTE_INDEX,index);            
+    *r = inp(PALETTE_DATA);   
+    *g = inp(PALETTE_DATA);   
+    *b = inp(PALETTE_DATA);   
 }
