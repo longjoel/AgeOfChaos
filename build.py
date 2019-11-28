@@ -28,7 +28,8 @@ def build_execute():
     args = ['dosbox',
         '-conf','./dosbox.config',
         '-c' ,'d:',
-        '-c', 'aoc.exe']
+        '-c', 'aoc.exe',
+        '-c','exit']
 
     subprocess.call(args)
 
