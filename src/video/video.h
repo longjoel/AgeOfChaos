@@ -20,4 +20,4 @@ void SetPallet(uint8_t index, uint8_t r, uint8_t g, uint8_t b);
 
 void GetPallet(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b);
 
-void PutChar(uint8_t col, uint8_t row, char c);
+void PutStr(uint8_t col, uint8_t row, char * str);

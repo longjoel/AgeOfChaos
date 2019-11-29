@@ -63,3 +63,16 @@ void GetPallet(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b){
     *g = inp(PALETTE_DATA);   
     *b = inp(PALETTE_DATA);   
 }
+
+void PutStr(uint8_t col, uint8_t row, char * str){
+       union REGS regs;
+
+    regs.h.ah = 0x02;  
+    regs.h.bh = 0x00;
+    regs.h.dh = row;
+    regs.h.dl = col;
+
+    int86(0x10,&regs,&regs); 
+
+    printf(str);
+}
