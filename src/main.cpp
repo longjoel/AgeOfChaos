@@ -30,12 +30,16 @@ int main(int nArgs, char **args)
                     SetPixel(i, j, (uint8_t)(((i % 200) + (j % 200) + q * (i / 2 * j / 2)) % 255));
                 }
             }
-
-            SwapBuffers();
-
-            if(PollKeyboard()== KBD_UP){
-                return 0;
+            int i = PollKeyboard();
+            if (i !=  0)
+            {
+                printf("%d\n", i);
             }
+            // SwapBuffers();
+
+            // if(PollKeyboard()== KBD_UP){
+            //     return 0;
+            // }
         }
     }
 
