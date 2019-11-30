@@ -15,7 +15,7 @@ int main(int nArgs, char **args)
 
     for (int c = 0; c < 256; c++)
     {
-        SetPallet(c, (c * 2) % 255, (c / 2) % 255, c);
+        SetPalette(c, (c * 2) % 255, (c / 2) % 255, c);
     }
 
     for (;;)

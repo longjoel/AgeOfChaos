@@ -12,6 +12,8 @@
 
 video_context _videoContext;
 
+sprite_context * sprites;
+
 void VideoInit(){
 
     __djgpp_nearptr_enable() ;
@@ -24,6 +26,18 @@ void VideoInit(){
 
     _videoContext.vga = (uint8_t* )(void *)(0xA0000 + __djgpp_conventional_base);
     _videoContext.backBuffer = (uint8_t *)malloc(320*200);
+
+    _videoContext.tileMemory = (uint8_t*)malloc(TILE_WIDTH
+        *TILE_HEIGHT
+        *MAX_TILES);
+    _videoContext.tileMapMemory = (uint8_t*)malloc(TILE_WIDTH
+        *TILE_HEIGHT
+        *TILEMAP_WIDTH
+        *TILEMAP_HEIGHT);
+
+    _videoContext.sprites = (sprite_context*)malloc(sizeof(sprite_context*)
+        *MAX_SCREEN_SPRITES);
+
 
 }
 
@@ -48,7 +62,7 @@ void SwapBuffers(){
    memcpy(_videoContext.vga, _videoContext.backBuffer, 320*200);
 }
 
-void SetPallet(uint8_t index, uint8_t r, uint8_t g, uint8_t b){
+void SetPalette(uint8_t index, uint8_t r, uint8_t g, uint8_t b){
 
     outp(PALETTE_INDEX,index);            
     outp(PALETTE_DATA,r);   
@@ -57,7 +71,7 @@ void SetPallet(uint8_t index, uint8_t r, uint8_t g, uint8_t b){
 }
 
 
-void GetPallet(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b){
+void GetPalette(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b){
  outp(PALETTE_INDEX,index);            
     *r = inp(PALETTE_DATA);   
     *g = inp(PALETTE_DATA);   
