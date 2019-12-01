@@ -30,11 +30,13 @@ int main(int nArgs, char **args)
                     SetPixel(i, j, (uint8_t)(((i % 200) + (j % 200) + q * (i / 2 * j / 2)) % 255));
                 }
             }
-            int i = PollKeyboard();
-            if (i !=  0)
-            {
-                printf("%d\n", i);
-            }
+            
+            uint8_t buttons;
+            uint16_t x,y;
+
+            
+           PollMouse(&buttons, &x, &y);
+           printf("Mouse: (%d,%d) %d \n", x,y,buttons);
             // SwapBuffers();
 
             // if(PollKeyboard()== KBD_UP){

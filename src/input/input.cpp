@@ -1,8 +1,9 @@
 #include <dos.h>
+#include <stdint.h>
 
 #include "input.h"
 
-int PollKeyboard(void)
+uint8_t PollKeyboard(void)
 {
     union REGS regs;
 
@@ -17,4 +18,26 @@ int PollKeyboard(void)
         int86(0x16, &regs, &regs); /* do it! */
     }
     return key;
+}
+
+void PollMouse(uint8_t *buttons, uint16_t *x, uint16_t *y)
+{
+    union REGS regs;
+
+    static bool isInit = false;
+
+    if(!isInit){
+
+        regs.w.ax = 0x000;
+        int86(0x33, &regs, &regs); /* do it! */
+        isInit = true;
+    }
+
+
+    regs.w.ax = 0x003;
+    int86(0x33, &regs, &regs); /* do it! */
+
+    *x = regs.w.cx/2;
+    *y = regs.w.dx;
+    *buttons = regs.w.bx;
 }
