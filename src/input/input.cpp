@@ -7,6 +7,18 @@ uint8_t PollKeyboard(void)
 {
     union REGS regs;
 
+    static bool isInit = false;
+
+    if(!isInit){
+        regs.h.al = 0x05;
+        regs.h.ah = 0x03;
+        regs.h.bh = 0x00;
+        regs.h.bl= 0x00;
+        int86(0x16, &regs, &regs); /* do it! */
+
+        isInit = true;
+    }
+
     regs.h.ah = 0x01;
     int86(0x16, &regs, &regs); /* do it! */
 

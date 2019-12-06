@@ -31,12 +31,15 @@ int main(int nArgs, char **args)
                 }
             }
             
+           // SwapBuffers();
+
             uint8_t buttons;
             uint16_t x,y;
 
             
            PollMouse(&buttons, &x, &y);
-           printf("Mouse: (%d,%d) %d \n", x,y,buttons);
+           printf("M: (%d,%d) %d - K (%d)\n", x,y,buttons, PollKeyboard());
+         
             // SwapBuffers();
 
             // if(PollKeyboard()== KBD_UP){
