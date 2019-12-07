@@ -12,6 +12,8 @@
 
 #include <stdint.h>
 
+#include "../lua/lua.h"
+
 typedef struct _sprite_context {
     bool enabled;
     bool transparent;
@@ -53,3 +55,15 @@ void GetSpriteAttributes(uint8_t index, sprite_context *spriteContext);
 void SetTilePalette(uint8_t spriteIndex, 
     uint8_t palette, 
     uint8_t r, uint8_t g, uint8_t b);
+
+/*
+
+LUA SCRIPT DEFINITIONS
+
+*/
+
+extern "C"{
+    int L_SwapBuffers(lua_State *L);
+
+    int L_SetPixel(lua_State *L);
+}
