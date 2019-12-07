@@ -12,6 +12,7 @@ def build_code():
     if os.path.isdir('bin'):
         shutil.rmtree('bin')
     os.makedirs('bin')
+    os.makedirs('bin/scripts')
 
     cc = '/usr/local/djgpp/bin/i586-pc-msdosdjgpp-g++'
 
@@ -23,6 +24,11 @@ def build_code():
     args = [cc, *cargs, *files, *output, *libs ]
 
     subprocess.call(args)
+
+    source = os.listdir("src/scripts/")
+    destination = "bin/scripts/"
+    for files in source:
+        shutil.copy("src/scripts/"+files,destination)
 
 def build_execute():
     args = ['dosbox',
