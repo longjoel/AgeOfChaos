@@ -43,7 +43,13 @@ void SwapBuffers();
 
 void SetPixel(uint16_t x, uint16_t y, uint8_t c);
 
+void SetTilePixel(uint8_t index, uint8_t x, uint8_t y, uint8_t c);
+
 void SetPalette(uint8_t index, uint8_t r, uint8_t g, uint8_t b);
+void SetTilePallet(uint8_t index, uint8_t r0, uint8_t g0, uint8_t b0,
+    uint8_t r1, uint8_t g1, uint8_t b1,
+    uint8_t r2, uint8_t g2, uint8_t b2,
+    uint8_t r3, uint8_t g3, uint8_t b3);
 
 void GetPalette(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b);
 
@@ -66,4 +72,6 @@ extern "C"{
     int L_SwapBuffers(lua_State *L);
 
     int L_SetPixel(lua_State *L);
+
+    int L_SetTilePixel(lua_State *L);
 }

@@ -51,6 +51,10 @@ void SetPixel(uint16_t x, uint16_t y, uint8_t c)
     _videoContext.backBuffer[(y << 8) + (y << 6) + x] = c;
 }
 
+void SetTilePixel(uint8_t index, uint8_t x, uint8_t y, uint8_t c){
+    _videoContext.tileMemory[(index * TILE_WIDTH * TILE*HEIGHT) + (y*x)+x] = (index*4)+c;
+}
+
 void SwapBuffers()
 {
     memcpy(_videoContext.vga, _videoContext.backBuffer, 320 * 200);
@@ -111,4 +115,10 @@ int L_SetPixel(lua_State *L){
     // function has
     return 1;
 }
+
+    int L_SetTilePixel(lua_State *L){
+        double index = lua_tonumber(L,1);
+        double x = lua_toNumber(L)
+    }
+
 }
