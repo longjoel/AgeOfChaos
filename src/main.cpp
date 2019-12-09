@@ -38,6 +38,8 @@ int main(int nArgs, char **args)
 
     lua_register(L, "SwapBuffers", L_SwapBuffers);
     lua_register(L, "SetPixel", L_SetPixel);
+    lua_register(L, "SetTilePallet", L_SetTilePalette);
+    lua_register(L, "SetTilePixel", L_SetTilePixel);
 
     /* Ask Lua to run our little script */
     int result =lua_pcall(L, 0, LUA_MULTRET, 0);

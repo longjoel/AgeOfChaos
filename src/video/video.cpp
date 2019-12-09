@@ -51,8 +51,9 @@ void SetPixel(uint16_t x, uint16_t y, uint8_t c)
     _videoContext.backBuffer[(y << 8) + (y << 6) + x] = c;
 }
 
-void SetTilePixel(uint8_t index, uint8_t x, uint8_t y, uint8_t c){
-    _videoContext.tileMemory[(index * TILE_WIDTH * TILE*HEIGHT) + (y*x)+x] = (index*4)+c;
+void SetTilePixel(uint8_t index, uint8_t x, uint8_t y, uint8_t c)
+{
+    _videoContext.tileMemory[(index * TILE_WIDTH * TILE * HEIGHT) + (y * x) + x] = (index * 4) + c;
 }
 
 void SwapBuffers()
@@ -67,6 +68,17 @@ void SetPalette(uint8_t index, uint8_t r, uint8_t g, uint8_t b)
     outp(PALETTE_DATA, r);
     outp(PALETTE_DATA, g);
     outp(PALETTE_DATA, b);
+}
+
+void SetTilePallet(uint8_t index, uint8_t r0, uint8_t g0, uint8_t b0,
+                   uint8_t r1, uint8_t g1, uint8_t b1,
+                   uint8_t r2, uint8_t g2, uint8_t b2,
+                   uint8_t r3, uint8_t g3, uint8_t b3)
+{
+    SetPalette((index * 4) + 0, r0, g0, b0);
+    SetPalette((index * 4) + 1, r1, g1, b1);
+    SetPalette((index * 4) + 2, r2, g2, b2);
+    SetPalette((index * 4) + 3, r3, g3, b3);
 }
 
 void GetPalette(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b)
@@ -95,30 +107,63 @@ void PutStr(uint8_t col, uint8_t row, char *str)
 LUA functions
 */
 
-extern "C"{
-int L_SwapBuffers(lua_State *L)
+extern "C"
 {
+    int L_SwapBuffers(lua_State *L)
+    {
 
-    SwapBuffers();
-    return 1;
-}
-
-int L_SetPixel(lua_State *L){
-
-    double x = lua_tonumber(L,1);
-    double y = lua_tonumber(L,2);
-    double c = lua_tonumber(L,3);
-
-    SetPixel((uint16_t)x, (uint16_t)y, (uint8_t)c);
-
-    // Return the number of arguments we pushed onto the stack (that is, the number of return values this
-    // function has
-    return 1;
-}
-
-    int L_SetTilePixel(lua_State *L){
-        double index = lua_tonumber(L,1);
-        double x = lua_toNumber(L)
+        SwapBuffers();
+        return 1;
     }
 
+    int L_SetPixel(lua_State *L)
+    {
+
+        double x = lua_tonumber(L, 1);
+        double y = lua_tonumber(L, 2);
+        double c = lua_tonumber(L, 3);
+
+        SetPixel((uint16_t)x, (uint16_t)y, (uint8_t)c);
+
+        // Return the number of arguments we pushed onto the stack (that is, the number of return values this
+        // function has
+        return 0;
+    }
+
+    int L_SetTilePixel(lua_State *L)
+    {
+        double index = lua_tonumber(L, 1);
+        double x = lua_tonumber(L, 2);
+        double y = lua_tonumber(L, 3);
+        double c = lua_tonumber(L, 4);
+
+        SetTilePixel((uint8_t)index, (uint8_t)x, (uint8_t)y, (uint8_t)c);
+
+        return 0;
+    }
+
+    int L_SetTilePalette(lua_State *L)
+    {
+
+        double index = lua_tointeger(L,1);
+        double r0,g0,b0, r1,g1,b1, r2,g2,b2, r3,g3,b3;
+        r0 = lua_tointeger(L,2);
+        g0 = lua_tointeger(L,3);
+        b0 = lua_tointeger(L,4);
+
+        r1 = lua_tointeger(L,5);
+        g1 = lua_tointeger(L,6);
+        b1 = lua_tointeger(L,7);
+
+        r2 = lua_tointeger(L,8);
+        g2 = lua_tointeger(L,9);
+        b2 = lua_tointeger(L,10);
+
+        r3 = lua_tointeger(L,11);
+        g3 = lua_tointeger(L,12);
+        b3 = lua_tointeger(L,13);
+
+        SetTilePallet(index, r0,g0,b0, r1,g1,b1, r2,g2,b2, r3,g3,b3);
+
+    }
 }

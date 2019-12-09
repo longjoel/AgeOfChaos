@@ -58,9 +58,6 @@ void PutStr(uint8_t col, uint8_t row, char * str);
 void SetSpriteAttributes(uint8_t index, sprite_context *spriteContext);
 void GetSpriteAttributes(uint8_t index, sprite_context *spriteContext);
 
-void SetTilePalette(uint8_t spriteIndex, 
-    uint8_t palette, 
-    uint8_t r, uint8_t g, uint8_t b);
 
 /*
 
@@ -74,4 +71,6 @@ extern "C"{
     int L_SetPixel(lua_State *L);
 
     int L_SetTilePixel(lua_State *L);
+
+    int L_SetTilePalette(lua_State *L);
 }
