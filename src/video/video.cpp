@@ -53,7 +53,7 @@ void SetPixel(uint16_t x, uint16_t y, uint8_t c)
 
 void SetTilePixel(uint8_t index, uint8_t x, uint8_t y, uint8_t c)
 {
-    _videoContext.tileMemory[(index * TILE_WIDTH * TILE * HEIGHT) + (y * x) + x] = (index * 4) + c;
+    _videoContext.tileMemory[(index * TILE_WIDTH * TILE_HEIGHT) + (y * x) + x] = (index * 4) + c;
 }
 
 void SwapBuffers()
