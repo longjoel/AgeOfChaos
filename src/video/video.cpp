@@ -113,7 +113,7 @@ extern "C"
     {
 
         SwapBuffers();
-        return 1;
+        return 0;
     }
 
     int L_SetPixel(lua_State *L)
