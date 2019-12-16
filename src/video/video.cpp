@@ -25,7 +25,7 @@ void VideoInit()
     _videoContext.vga = (uint8_t *)(void *)(0xA0000 + __djgpp_conventional_base);
     _videoContext.backBuffer = (uint8_t *)malloc(320 * 200);
 
-   // _videoContext.tileMemory = (uint8_t *)malloc(TILE_WIDTH * TILE_HEIGHT * TILE_SHEET_WIDTH * TILE_SHEET_HEIGHT);
+    _videoContext.tileMemory = (uint8_t *)malloc(TILE_WIDTH * TILE_HEIGHT * TILE_SHEET_WIDTH * TILE_SHEET_HEIGHT);
 }
 
 void VideoCleanup()
@@ -128,9 +128,6 @@ extern "C"
         double c = lua_tonumber(L, 3);
 
         SetPixel((uint16_t)x, (uint16_t)y, (uint8_t)c);
-
-        // Return the number of arguments we pushed onto the stack (that is, the number of return values this
-        // function has
         return 0;
     }
 
@@ -142,7 +139,7 @@ extern "C"
         double y = lua_tointeger(L, 4);
         double c = lua_tointeger(L, 5);
 
-        //SetTilePixel(col, row, x, y, c);
+        SetTilePixel(col, row, x, y, c);
 
         return 0;
     }
@@ -155,7 +152,7 @@ extern "C"
         double y = lua_tointeger(L, 4);
         double c = lua_tointeger(L, 5);
 
-        //DrawTile(col, row, x, y, c);
+        DrawTile(col, row, x, y, c);
         return 0;
     }
 }
