@@ -11,8 +11,6 @@
 
 video_context _videoContext;
 
-sprite_context *sprites;
-
 void VideoInit()
 {
 
@@ -27,10 +25,7 @@ void VideoInit()
     _videoContext.vga = (uint8_t *)(void *)(0xA0000 + __djgpp_conventional_base);
     _videoContext.backBuffer = (uint8_t *)malloc(320 * 200);
 
-    _videoContext.tileMemory = (uint8_t *)malloc(TILE_WIDTH * TILE_HEIGHT * MAX_TILES);
-    _videoContext.tileMapMemory = (uint8_t *)malloc(TILE_WIDTH * TILE_HEIGHT * TILEMAP_WIDTH * TILEMAP_HEIGHT);
-
-    _videoContext.sprites = (sprite_context *)malloc(sizeof(sprite_context *) * MAX_SCREEN_SPRITES);
+   // _videoContext.tileMemory = (uint8_t *)malloc(TILE_WIDTH * TILE_HEIGHT * TILE_SHEET_WIDTH * TILE_SHEET_HEIGHT);
 }
 
 void VideoCleanup()
@@ -51,11 +46,6 @@ void SetPixel(uint16_t x, uint16_t y, uint8_t c)
     _videoContext.backBuffer[(y << 8) + (y << 6) + x] = c;
 }
 
-void SetTilePixel(uint8_t index, uint8_t x, uint8_t y, uint8_t c)
-{
-    _videoContext.tileMemory[(index * TILE_WIDTH * TILE_HEIGHT) + (y * x) + x] = (index * 4) + c;
-}
-
 void SwapBuffers()
 {
     memcpy(_videoContext.vga, _videoContext.backBuffer, 320 * 200);
@@ -70,15 +60,29 @@ void SetPalette(uint8_t index, uint8_t r, uint8_t g, uint8_t b)
     outp(PALETTE_DATA, b);
 }
 
-void SetTilePallet(uint8_t index, uint8_t r0, uint8_t g0, uint8_t b0,
-                   uint8_t r1, uint8_t g1, uint8_t b1,
-                   uint8_t r2, uint8_t g2, uint8_t b2,
-                   uint8_t r3, uint8_t g3, uint8_t b3)
+void SetTilePixel(uint16_t col,
+                  uint16_t row,
+                  uint16_t x, uint16_t y, uint8_t color)
 {
-    SetPalette((index * 4) + 0, r0, g0, b0);
-    SetPalette((index * 4) + 1, r1, g1, b1);
-    SetPalette((index * 4) + 2, r2, g2, b2);
-    SetPalette((index * 4) + 3, r3, g3, b3);
+
+    _videoContext.tileMemory[(((row * 8) + y) * 512) + (col * 8) + (x)] = color;
+}
+
+void DrawTile(uint16_t col,
+                uint16_t row,
+                uint16_t x, uint16_t y, uint8_t transparentColor)
+{
+    for (int yy = 0; yy < 8; yy++)
+    {
+        for (int xx = 0; xx < 8; xx++)
+        {
+            uint8_t c = _videoContext.tileMemory[(((row * 8) + yy) * 512) + (col * 8) + (xx)];
+            if (c != transparentColor && (y + yy) >= 0 && (y + yy < 200) && (x + xx >= 0) && (x + xx < 320))
+            {
+                _videoContext.backBuffer[((y + yy) * 320) + (x + xx)] = c;
+            }
+        }
+    }
 }
 
 void GetPalette(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b)
@@ -132,38 +136,26 @@ extern "C"
 
     int L_SetTilePixel(lua_State *L)
     {
-        double index = lua_tonumber(L, 1);
-        double x = lua_tonumber(L, 2);
-        double y = lua_tonumber(L, 3);
-        double c = lua_tonumber(L, 4);
+        double col = lua_tointeger(L, 1);
+        double row = lua_tointeger(L, 2);
+        double x = lua_tointeger(L, 3);
+        double y = lua_tointeger(L, 4);
+        double c = lua_tointeger(L, 5);
 
-        SetTilePixel((uint8_t)index, (uint8_t)x, (uint8_t)y, (uint8_t)c);
+        //SetTilePixel(col, row, x, y, c);
 
         return 0;
     }
 
-    int L_SetTilePalette(lua_State *L)
+    int L_DrawTile(lua_State *L)
     {
+        double col = lua_tointeger(L, 1);
+        double row = lua_tointeger(L, 2);
+        double x = lua_tointeger(L, 3);
+        double y = lua_tointeger(L, 4);
+        double c = lua_tointeger(L, 5);
 
-        double index = lua_tointeger(L,1);
-        double r0,g0,b0, r1,g1,b1, r2,g2,b2, r3,g3,b3;
-        r0 = lua_tointeger(L,2);
-        g0 = lua_tointeger(L,3);
-        b0 = lua_tointeger(L,4);
-
-        r1 = lua_tointeger(L,5);
-        g1 = lua_tointeger(L,6);
-        b1 = lua_tointeger(L,7);
-
-        r2 = lua_tointeger(L,8);
-        g2 = lua_tointeger(L,9);
-        b2 = lua_tointeger(L,10);
-
-        r3 = lua_tointeger(L,11);
-        g3 = lua_tointeger(L,12);
-        b3 = lua_tointeger(L,13);
-
-        SetTilePallet(index, r0,g0,b0, r1,g1,b1, r2,g2,b2, r3,g3,b3);
-
+        //DrawTile(col, row, x, y, c);
+        return 0;
     }
 }
