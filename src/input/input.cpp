@@ -64,6 +64,8 @@ extern "C"
 
         lua_pushnumber(L, result);
 
+        return 1;
+
     }
 
     int L_PollMouse(lua_State *L)
@@ -76,17 +78,16 @@ extern "C"
 
         lua_newtable(L);
 
-        lua_pushstring(L, "buttons");
+        lua_pushliteral(L, "buttons");
         lua_pushnumber(L, buttons);
         lua_settable(L, -3); /* 3rd element from the stack top */
 
-        lua_pushstring(L, "x");
+        lua_pushliteral(L, "x");
         lua_pushnumber(L, x);
         lua_settable(L, -3);
 
-        lua_pushstring(L, "y");
+        lua_pushliteral(L, "y");
         lua_pushnumber(L, y);
-
         lua_settable(L, -3);
 
         return 1;
