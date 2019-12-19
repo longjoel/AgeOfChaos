@@ -125,7 +125,7 @@ void fskip(FILE *fp, int num_bytes)
         fgetc(fp);
 }
 
-void LoadTiles(char *file)
+void LoadTiles(const char *file)
 {
     FILE *fp;
     long index;
@@ -244,7 +244,7 @@ extern "C"
     }
 
      int L_LoadTiles(lua_State *L){
-         char *file = lua_tostring(L,1);
+         const char *file = lua_tostring(L,1);
          LoadTiles(file);
          return 0;
      }

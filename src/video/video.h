@@ -32,7 +32,7 @@ void GetPalette(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b);
 
 void PutStr(uint8_t col, uint8_t row, char * str);
 
-void LoadTiles(char *path);
+void LoadTiles(const char *path);
 
 /*
 

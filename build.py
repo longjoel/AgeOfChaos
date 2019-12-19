@@ -13,6 +13,7 @@ def build_code():
         shutil.rmtree('bin')
     os.makedirs('bin')
     os.makedirs('bin/scripts')
+    os.makedirs('bin/images')
 
     cc = '/usr/local/djgpp/bin/i586-pc-msdosdjgpp-g++'
 
@@ -41,6 +42,7 @@ def build_docker():
         shutil.rmtree('bin')
     os.makedirs('bin')
     os.makedirs('bin/scripts')
+    os.makedirs('bin/images')
 
     dockerArgs=['run','--rm', '-it', '--volume='+os.getcwd()+'/:/workdir', 'gstolarz/djgpp']
     print(os.getcwd())
@@ -71,12 +73,18 @@ def build_execute():
 
     subprocess.call(args)
 
+def build_images():
+    source = os.listdir("images/")
+    destination = "bin/images/"
+    for files in source:
+        shutil.copy("./images/"+files,destination)
+
 for el in sys.argv:
     if el == 'build':
         build_code()
+        build_images()
     if el == 'build:docker':
         build_docker()
-    if el == 'content':
         build_images()
     if el == 'run':
         build_execute()
