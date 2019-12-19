@@ -9,6 +9,17 @@
 #define PALETTE_DATA 0x03c9
 #define INPUT_STATUS 0x03da
 
+typedef uint8_t byte;
+typedef uint16_t word;
+typedef uint32_t dword;
+
+typedef struct tagBITMAP /* the structure for a bitmap. */
+{
+    word width;
+    word height;
+    byte *data;
+} BITMAP;
+
 video_context _videoContext;
 
 void VideoInit()
@@ -69,8 +80,8 @@ void SetTilePixel(uint16_t col,
 }
 
 void DrawTile(uint16_t col,
-                uint16_t row,
-                uint16_t x, uint16_t y, uint8_t transparentColor)
+              uint16_t row,
+              uint16_t x, uint16_t y, uint8_t transparentColor)
 {
     for (int yy = 0; yy < 8; yy++)
     {
@@ -105,6 +116,82 @@ void PutStr(uint8_t col, uint8_t row, char *str)
     int86(0x10, &regs, &regs);
 
     printf(str);
+}
+
+void fskip(FILE *fp, int num_bytes)
+{
+    int i;
+    for (i = 0; i < num_bytes; i++)
+        fgetc(fp);
+}
+
+void LoadTiles(char *file)
+{
+    FILE *fp;
+    long index;
+    word num_colors;
+    int x;
+    BITMAP bx;
+    BITMAP *b = &bx;
+
+    /* open the file */
+    if ((fp = fopen(file, "rb")) == NULL)
+    {
+        printf("Error opening file %s.\n", file);
+        exit(1);
+    }
+
+    /* check to see if it is a valid bitmap file */
+    if (fgetc(fp) != 'B' || fgetc(fp) != 'M')
+    {
+        fclose(fp);
+        printf("%s is not a bitmap file.\n", file);
+        exit(1);
+    }
+
+    /* read in the width and height of the image, and the
+     number of colors used; ignore the rest */
+    fskip(fp, 16);
+    fread(&b->width, sizeof(word), 1, fp);
+    fskip(fp, 2);
+    fread(&b->height, sizeof(word), 1, fp);
+    fskip(fp, 22);
+    fread(&num_colors, sizeof(word), 1, fp);
+    fskip(fp, 6);
+
+    /* assume we are working with an 8-bit file */
+    if (num_colors == 0)
+        num_colors = 256;
+
+        if(b->width != 512 && b->height !=512){
+            fclose(fp);
+        printf("Wrong size for file %s. Should be 512x512\n", file);
+        exit(1);
+        }
+
+    /* try to allocate memory */
+    if ((b->data = (byte *)malloc((word)(b->width * b->height))) == NULL)
+    {
+        fclose(fp);
+        printf("Error allocating memory for file %s.\n", file);
+        exit(1);
+    }
+
+    /* Ignore the palette information for now.
+     See palette.c for code to read the palette info. */
+    /* read the palette information */
+    for (index = 0; index < num_colors; index++)
+    {
+        SetPalette(index, fgetc(fp) >> 2, fgetc(fp) >> 2, fgetc(fp) >> 2);
+        fgetc(fp);
+    }
+
+    /* read the bitmap */
+    for (index = (b->height - 1) * b->width; index >= 0; index -= b->width)
+        for (x = 0; x < b->width; x++)
+            _videoContext.tileMemory[(word)index + x] = (byte)fgetc(fp);
+
+    fclose(fp);
 }
 
 /*
@@ -155,4 +242,10 @@ extern "C"
         DrawTile(col, row, x, y, c);
         return 0;
     }
+
+     int L_LoadTiles(lua_State *L){
+         char *file = lua_tostring(L,1);
+         LoadTiles(file);
+         return 0;
+     }
 }

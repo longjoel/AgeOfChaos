@@ -32,6 +32,8 @@ void GetPalette(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b);
 
 void PutStr(uint8_t col, uint8_t row, char * str);
 
+void LoadTiles(char *path);
+
 /*
 
 LUA SCRIPT DEFINITIONS
@@ -46,5 +48,7 @@ extern "C"{
     int L_SetTilePixel(lua_State *L);
 
     int L_DrawTile(lua_State *L);
+
+    int L_LoadTiles(lua_State *L);
 
 }
