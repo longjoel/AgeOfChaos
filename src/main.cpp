@@ -41,6 +41,7 @@ int main(int nArgs, char **args)
     lua_register(L, "SetPixel", L_SetPixel);
     lua_register(L, "SetTilePixel", L_SetTilePixel);
     lua_register(L, "DrawTile", L_DrawTile);
+    lua_register(L, "LoadTiles", L_LoadTiles);
 
     // Register input functions
 

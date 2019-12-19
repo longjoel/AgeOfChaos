@@ -1,6 +1,6 @@
 -- main
 
-loadTiles('images/hello.bmp')
+LoadTiles('images/hello.bmp')
 
 while true do
     local x = 0

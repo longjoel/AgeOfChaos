@@ -170,12 +170,12 @@ void LoadTiles(const char *file)
         }
 
     /* try to allocate memory */
-    if ((b->data = (byte *)malloc((word)(b->width * b->height))) == NULL)
-    {
-        fclose(fp);
-        printf("Error allocating memory for file %s.\n", file);
-        exit(1);
-    }
+    // if ((b->data = (byte *)malloc((word)(b->width * b->height))) == NULL)
+    // {
+    //     fclose(fp);
+    //     printf("Error allocating memory for file %s.\n", file);
+    //     exit(1);
+    // }
 
     /* Ignore the palette information for now.
      See palette.c for code to read the palette info. */
