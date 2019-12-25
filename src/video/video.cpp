@@ -25,7 +25,7 @@ video_context _videoContext;
 void VideoInit()
 {
 
-    __djgpp_nearptr_enable();
+   // __djgpp_nearptr_enable();
 
     union REGS regs;
 
@@ -49,7 +49,7 @@ void VideoCleanup()
     regs.h.al = 0x03;          /* 256-color */
     int86(0x10, &regs, &regs); /* do it! */
 
-    __djgpp_nearptr_disable();
+   // __djgpp_nearptr_disable();
 }
 
 void SetPixel(uint16_t x, uint16_t y, uint8_t c)
