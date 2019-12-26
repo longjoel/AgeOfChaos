@@ -75,7 +75,7 @@ void LoadFont()
         exit(1);
     }
 
-  for (index = 0; index < num_colors; index++)
+    for (index = 0; index < num_colors; index++)
     {
         SetPalette(index, fgetc(fp) >> 2, fgetc(fp) >> 2, fgetc(fp) >> 2);
         fgetc(fp);
@@ -85,7 +85,7 @@ void LoadFont()
     /* read the bitmap */
     for (index = (b->height - 1) * b->width; index >= 0; index -= b->width)
         for (x = 0; x < b->width; x++)
-            b->data[(word)index + x] = (byte)fgetc(fp);
+            _videoContext.fontMemory[(word)index + x] = (byte)fgetc(fp);
 
     fclose(fp);
 }
@@ -176,9 +176,9 @@ void DrawChar(int x, int y, char c)
     {
         for (int xx = 0; xx < 32; xx++)
         {
-            uint8_t pix = _videoContext.fontMemory[((basey + yy) * 511) + (basex + xx)];
+            uint8_t pix = _videoContext.fontMemory[((basey + yy) * 512) + (basex + xx)];
 
-            _videoContext.backBuffer[((y + yy) * 319) + (x + xx)] = pix;
+            _videoContext.backBuffer[((y + yy) * 320) + (x + xx)] = pix;
         }
     }
 }
