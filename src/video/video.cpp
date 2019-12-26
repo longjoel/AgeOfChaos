@@ -5,6 +5,8 @@
 #include <sys/nearptr.h>
 #include "video.h"
 
+#include "../sys/sys.h"
+
 #define PALETTE_INDEX 0x03c8
 #define PALETTE_DATA 0x03c9
 #define INPUT_STATUS 0x03da
@@ -72,22 +74,23 @@ void LoadFont()
     {
         fclose(fp);
         printf("Wrong size for file images/font.bmp. Should be 512x256\n");
+        getchar();
         exit(1);
     }
 
-  for (index = 0; index < num_colors; index++)
+    for (index = 0; index < num_colors; index++)
     {
         SetPalette(index, fgetc(fp) >> 2, fgetc(fp) >> 2, fgetc(fp) >> 2);
         fgetc(fp);
     }
-
-    /* read the bitmap */
     /* read the bitmap */
     for (index = (b->height - 1) * b->width; index >= 0; index -= b->width)
         for (x = 0; x < b->width; x++)
-            b->data[(word)index + x] = (byte)fgetc(fp);
+            _videoContext.fontMemory[(word)index + x] = (byte)fgetc(fp);
 
     fclose(fp);
+
+    Log("Font loaded OK");
 }
 
 void VideoInit()
@@ -105,7 +108,7 @@ void VideoInit()
     _videoContext.backBuffer = (uint8_t *)malloc(320 * 200);
 
     _videoContext.tileMemory = (uint8_t *)malloc(TILE_WIDTH * TILE_HEIGHT * TILE_SHEET_WIDTH * TILE_SHEET_HEIGHT);
-    _videoContext.fontMemory = (uint8_t *)malloc(512 * 256);
+    _videoContext.fontMemory = (uint8_t *)malloc(512 * 512);
 
     LoadFont();
 }
@@ -172,13 +175,18 @@ void DrawChar(int x, int y, char c)
     int basex = (c % 16) * 32;
     int basey = (c / 8) * 32;
 
+    SetPalette(0,0,0,0);
+    SetPalette(1,128,128,128);
+    SetPalette(2,255,255,255);
+
     for (int yy = 0; yy < 32; yy++)
     {
         for (int xx = 0; xx < 32; xx++)
         {
-            uint8_t pix = _videoContext.fontMemory[((basey + yy) * 511) + (basex + xx)];
-
-            _videoContext.backBuffer[((y + yy) * 319) + (x + xx)] = pix;
+            uint8_t pix = _videoContext.fontMemory[((basey + yy) * 512) + (basex + xx)];
+            Log(pix);
+                _videoContext.backBuffer[((y + yy) * 320) + (x + xx)] = pix;
+           
         }
     }
 }

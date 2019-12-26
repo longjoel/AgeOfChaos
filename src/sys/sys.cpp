@@ -13,3 +13,9 @@ void SysInit(){
     // __dpmi_int(0x10, &regs);
 
 }
+
+void Log(const char *value){
+    FILE *fptr = fopen("log.txt", "a");
+    fprintf(fptr, value);
+    fclose(fptr);
+}
