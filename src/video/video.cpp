@@ -175,18 +175,16 @@ void DrawChar(int x, int y, char c)
     int basex = (c % 16) * 32;
     int basey = (c / 8) * 32;
 
-    SetPalette(0,0,0,0);
-    SetPalette(1,128,128,128);
-    SetPalette(2,255,255,255);
+    SetPalette(0, 0, 0, 0);
+    SetPalette(1, 128, 128, 128);
+    SetPalette(2, 255, 255, 255);
 
     for (int yy = 0; yy < 32; yy++)
     {
         for (int xx = 0; xx < 32; xx++)
         {
             uint8_t pix = _videoContext.fontMemory[((basey + yy) * 512) + (basex + xx)];
-            Log(pix);
-                _videoContext.backBuffer[((y + yy) * 320) + (x + xx)] = pix;
-           
+            _videoContext.backBuffer[((y + yy) * 320) + (x + xx)] = pix;
         }
     }
 }
