@@ -14,6 +14,7 @@ typedef struct _video_context {
     uint8_t * vga;
     uint8_t *backBuffer;
     uint8_t *tileMemory;
+    uint8_t *fontMemory;
 
 } video_context;
 

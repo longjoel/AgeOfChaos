@@ -6,6 +6,7 @@ import subprocess
 from shutil import copyfile
 import shutil
 import sys
+from PIL import Image
 
 # Build code
 def build_code():
@@ -77,7 +78,10 @@ def build_images():
     source = os.listdir("images/")
     destination = "bin/images/"
     for files in source:
-        shutil.copy("./images/"+files,destination)
+        image = Image.open(os.path.join('images',files))
+        image = image.convert('P', palette=Image.ADAPTIVE, colors=256)
+        image.save(os.path.join('bin/images',os.path.splitext(files)[0]+".bmp"))
+
 
 for el in sys.argv:
     if el == 'build':
