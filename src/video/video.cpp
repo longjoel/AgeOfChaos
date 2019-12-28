@@ -76,6 +76,10 @@ void SwapBuffers()
     memcpy(_videoContext.vga, _videoContext.backBuffer, 320 * 200);
 }
 
+void ClearBuffer(){
+    memset(_videoContext.backBuffer,0,320*200);
+}
+
 void SetPalette(uint8_t index, uint8_t r, uint8_t g, uint8_t b)
 {
     outp(PALETTE_INDEX, index);
@@ -118,19 +122,40 @@ void GetPalette(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b)
     *b = inp(PALETTE_DATA);
 }
 
-void PutStr(uint8_t col, uint8_t row, char *str)
-{
-    union REGS regs;
-
-    regs.h.ah = 0x02;
-    regs.h.bh = 0x00;
-    regs.h.dh = row;
-    regs.h.dl = col;
-
-    int86(0x10, &regs, &regs);
-
-    printf(str);
+void DrawChar(uint16_t x, uint16_t y, uint8_t c){
+    int col = 0;
+    int row = 0;
+   
+    if(c >= 'A' && c <='Z'){
+        col= (c-'A')+17;
+        row=0;
+    }
+    if(c >= 'a' && c <='z'){
+        col= (c-'a')+17;
+        row=1;
+    }
+   const char *row3 = "`1234567890-=[]\\;',./ ";
+   if(strchr(row3,c)){
+       int index = strchr(row3,c)-row3;
+       row = 2;
+       col= index+17;
+   }
+   const char *row4 = "~!@#$%^&*()_+{}|:\"<>?";
+   
+   if(strchr(row4,c)){
+       int index = strchr(row4,c)-row4;
+       row = 3;
+       col= index+17;
+   }
+    DrawTile(col,row,x,y,0);
 }
+
+void DrawString(uint16_t x, uint16_t y, const char *s){
+    for(int i = 0; i < strlen(s); i++){
+        DrawChar(x+(i*8), y, s[i]);
+    }
+}
+
 
 void LoadTiles(const char *file)
 {
@@ -243,6 +268,19 @@ extern "C"
     {
         const char *file = lua_tostring(L, 1);
         LoadTiles(file);
+        return 0;
+    }
+
+    int L_DrawString(lua_State *L){
+         double x = lua_tointeger(L, 1);
+        double y = lua_tointeger(L, 2);
+        const char *s = lua_tostring(L, 3);
+        DrawString(x,y,s);
+        return 0;
+    }
+
+    int L_ClearBuffer(lua_State *L){
+        ClearBuffer();
         return 0;
     }
 }

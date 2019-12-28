@@ -3,8 +3,8 @@
 while true do
  
     local mouse = PollMouse()
-
-    DrawTile(0, 0, mouse.x, mouse.y, 0)
+    ClearBuffer()
+    DrawString(mouse.x, mouse.y, "Age of Chaos!")
 
     SwapBuffers()
 

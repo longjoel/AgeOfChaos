@@ -27,11 +27,15 @@ void SetTilePixel(uint16_t col, uint16_t row, uint16_t x, uint16_t y, uint8_t co
 
 void DrawTile(uint16_t col, uint16_t row, uint16_t x, uint16_t y, uint8_t transparentColor);
 
+void DrawChar(uint16_t x, uint16_t y, uint8_t c);
+void DrawString(uint16_t x, uint16_t y, const char *s);
+
 void SetPalette(uint8_t index, uint8_t r, uint8_t g, uint8_t b);
 
 void GetPalette(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b);
 
-void PutStr(uint8_t col, uint8_t row, char * str);
+void ClearBuffer();
+
 
 void LoadTiles(const char *path);
 
@@ -51,5 +55,9 @@ extern "C"{
     int L_DrawTile(lua_State *L);
 
     int L_LoadTiles(lua_State *L);
+
+    int L_DrawString(lua_State *L);
+
+    int L_ClearBuffer(lua_State *L);
 
 }
