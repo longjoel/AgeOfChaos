@@ -31,68 +31,6 @@ void fskip(FILE *fp, int num_bytes)
 
 video_context _videoContext;
 
-void LoadFont()
-{
-
-    FILE *fp;
-    long index;
-    word num_colors;
-    int x;
-    BITMAP bx;
-    BITMAP *b = &bx;
-
-    /* open the file */
-    if ((fp = fopen("images/font.bmp", "rb")) == NULL)
-    {
-        printf("Error opening images/font.bmp.\n");
-        exit(1);
-    }
-
-    /* check to see if it is a valid bitmap file */
-    if (fgetc(fp) != 'B' || fgetc(fp) != 'M')
-    {
-        fclose(fp);
-        printf("images/font.bmp is not a bitmap file.\n");
-        exit(1);
-    }
-
-    /* read in the width and height of the image, and the
-     number of colors used; ignore the rest */
-    fskip(fp, 16);
-    fread(&b->width, sizeof(word), 1, fp);
-    fskip(fp, 2);
-    fread(&b->height, sizeof(word), 1, fp);
-    fskip(fp, 22);
-    fread(&num_colors, sizeof(word), 1, fp);
-    fskip(fp, 6);
-
-    /* assume we are working with an 8-bit file */
-    if (num_colors == 0)
-        num_colors = 256;
-
-    if (b->width != 512 && b->height != 256)
-    {
-        fclose(fp);
-        printf("Wrong size for file images/font.bmp. Should be 512x256\n");
-        getchar();
-        exit(1);
-    }
-
-    for (index = 0; index < num_colors; index++)
-    {
-        SetPalette(index, fgetc(fp) >> 2, fgetc(fp) >> 2, fgetc(fp) >> 2);
-        fgetc(fp);
-    }
-    /* read the bitmap */
-    for (index = (b->height - 1) * b->width; index >= 0; index -= b->width)
-        for (x = 0; x < b->width; x++)
-            _videoContext.fontMemory[(word)index + x] = (byte)fgetc(fp);
-
-    fclose(fp);
-
-    Log("Font loaded OK");
-}
-
 void VideoInit()
 {
 
@@ -110,13 +48,14 @@ void VideoInit()
     _videoContext.tileMemory = (uint8_t *)malloc(TILE_WIDTH * TILE_HEIGHT * TILE_SHEET_WIDTH * TILE_SHEET_HEIGHT);
     _videoContext.fontMemory = (uint8_t *)malloc(512 * 512);
 
-    LoadFont();
 }
 
 void VideoCleanup()
 {
     free(_videoContext.backBuffer);
+    // TODO: clear tile memory and font memory
 
+    
     union REGS regs;
 
     regs.h.ah = 0x00;          /* function 00h = mode set */
@@ -133,12 +72,12 @@ void SetPixel(uint16_t x, uint16_t y, uint8_t c)
 
 void SwapBuffers()
 {
+    // todo: wait for vsync
     memcpy(_videoContext.vga, _videoContext.backBuffer, 320 * 200);
 }
 
 void SetPalette(uint8_t index, uint8_t r, uint8_t g, uint8_t b)
 {
-
     outp(PALETTE_INDEX, index);
     outp(PALETTE_DATA, r);
     outp(PALETTE_DATA, g);
@@ -170,32 +109,6 @@ void DrawTile(uint16_t col,
     }
 }
 
-void DrawChar(int x, int y, char c)
-{
-    int basex = (c % 16) * 32;
-    int basey = (c / 8) * 32;
-
-    SetPalette(0, 0, 0, 0);
-    SetPalette(1, 128, 128, 128);
-    SetPalette(2, 255, 255, 255);
-
-    for (int yy = 0; yy < 32; yy++)
-    {
-        for (int xx = 0; xx < 32; xx++)
-        {
-            uint8_t pix = _videoContext.fontMemory[((basey + yy) * 512) + (basex + xx)];
-            _videoContext.backBuffer[((y + yy) * 320) + (x + xx)] = pix;
-        }
-    }
-}
-
-void DrawString(int x, int y, char *s)
-{
-    for (int i = 0; i < strlen(s); i++)
-    {
-        DrawChar(x + (i * 32), y, s[i]);
-    }
-}
 
 void GetPalette(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b)
 {
@@ -286,7 +199,6 @@ extern "C"
 {
     int L_SwapBuffers(lua_State *L)
     {
-        DrawString(0, 0, "Age");
         SwapBuffers();
         return 0;
     }

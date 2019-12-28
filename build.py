@@ -79,7 +79,7 @@ def build_images():
     destination = "bin/images/"
     for files in source:
         image = Image.open(os.path.join('images',files))
-        image = image.convert('P', palette=Image.ADAPTIVE, colors=256)
+        #image = image.convert('P', palette=Image.ADAPTIVE, colors=256)
         image.save(os.path.join('bin/images',os.path.splitext(files)[0]+".bmp"))
 
 
