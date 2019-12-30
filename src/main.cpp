@@ -10,6 +10,11 @@
 #include "lua/lualib.h"
 #include "lua/lauxlib.h"
 
+int L_Log(lua_State *L){
+    const char* message = lua_tostring(L,1);
+    Log(message);
+}
+
 int main(int nArgs, char **args)
 {
 
@@ -37,6 +42,9 @@ int main(int nArgs, char **args)
         fprintf(stderr, "Couldn't load file: %s\n", lua_tostring(L, -1));
         exit(1);
     }
+
+// Register Log functions
+    lua_register(L,"Log",L_Log);
 
 // Register video functions
     lua_register(L, "SwapBuffers", L_SwapBuffers);

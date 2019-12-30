@@ -17,5 +17,6 @@ void SysInit(){
 void Log(const char *value){
     FILE *fptr = fopen("log.txt", "a");
     fprintf(fptr, value);
+    fprintf(fptr, "\n");
     fclose(fptr);
 }
