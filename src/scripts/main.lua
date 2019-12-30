@@ -12,17 +12,23 @@ local sprites = {{name="hero",
 
 local DrawSprite = function(i,x,y)
     local sprite = sprites[i]
-    Log(sprite.name)
-    Log("rows:"..sprite.row_start .." "..sprite.row_end)
-    Log("cols:"..sprite.col_start .." "..sprite.col_end)
-    local row =0
-    local col = 0
-    for row = sprite.row_start, sprite.row_end,1 do
-        for col = sprites.col_start, sprite.col_end,1 do
-            Log("row, col: "..row..", "..col)
-            --DrawTile(row, col, x,y,0)
+    
+
+    local row = sprite.row_start
+    local col = sprite.col_start
+    
+    while row <= sprite.row_end +1 do
+
+        while col <= sprite.col_end +1 do
+
+            DrawTile(col, row, x + (col-sprite.col_start)*8,y+(row-sprite.row_start)*8,0)
+           
+            col =col+1
         end
+        col = sprite.col_start
+        row =row+1
     end
+    
 end
 
 local level = {{}}
