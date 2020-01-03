@@ -42,7 +42,9 @@ int main(int nArgs, char **args)
     if (status) {
         /* If something went wrong, error message is at the top of */
         /* the stack */
-        fprintf(stderr, "Couldn't load file: %s\n", lua_tostring(L, -1));
+        const char *error = lua_tostring(L, -1);
+        fprintf(stderr, "Couldn't load file: %s\n", error);
+        Log(error);
         exit(1);
     }
 
