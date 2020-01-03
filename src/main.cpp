@@ -15,6 +15,7 @@ int L_Log(lua_State *L){
     Log(message);
 }
 
+
 int main(int nArgs, char **args)
 {
 
@@ -31,6 +32,8 @@ int main(int nArgs, char **args)
      * all the time.
      */
     L = luaL_newstate();
+
+    lua_atpanic(L, L_Log);
 
     luaL_openlibs(L); /* Load Lua libraries */
 

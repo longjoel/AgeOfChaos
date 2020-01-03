@@ -14,19 +14,15 @@ local DrawSprite = function(i,x,y)
     local sprite = sprites[i]
     
 
-    local row = sprite.row_start
-    local col = sprite.col_start
+    local row_start = sprite.row_start
+    local col_start = sprite.col_start
+    local row_end = sprite.row_end
+    local col_end = sprite.col_end
     
-    while row <= sprite.row_end +1 do
-
-        while col <= sprite.col_end +1 do
-
+    for row= row_start,row_end do
+        for col=col_start,col_end do
             DrawTile(col, row, x + (col-sprite.col_start)*8,y+(row-sprite.row_start)*8,0)
-           
-            col =col+1
         end
-        col = sprite.col_start
-        row =row+1
     end
     
 end

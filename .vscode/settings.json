@@ -3,5 +3,9 @@
     "files.associations": {
         "stdlib.h": "c",
         "conio.h": "c"
-    }
+    },
+    "Lua.diagnostics.globals": [
+        "DrawTile",
+        "PollMouse"
+    ]
 }
