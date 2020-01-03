@@ -44,8 +44,8 @@ int main(int nArgs, char **args)
         /* the stack */
         const char *error = lua_tostring(L, -1);
         fprintf(stderr, "Couldn't load file: %s\n", error);
-        Log(error);
-        exit(1);
+       // Log(error);
+       // exit(0);
     }
 
 // Register Log functions
