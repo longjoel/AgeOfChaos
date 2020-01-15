@@ -7,6 +7,8 @@
     "Lua.diagnostics.globals": [
         "DrawTile",
         "PollMouse",
-        "SwapBuffers"
+        "SwapBuffers",
+        "DrawString",
+        "DrawTileRange"
     ]
 }

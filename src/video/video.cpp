@@ -47,7 +47,6 @@ void VideoInit()
 
     _videoContext.tileMemory = (uint8_t *)malloc(TILE_WIDTH * TILE_HEIGHT * TILE_SHEET_WIDTH * TILE_SHEET_HEIGHT);
     _videoContext.fontMemory = (uint8_t *)malloc(512 * 512);
-
 }
 
 void VideoCleanup()
@@ -55,7 +54,6 @@ void VideoCleanup()
     free(_videoContext.backBuffer);
     // TODO: clear tile memory and font memory
 
-    
     union REGS regs;
 
     regs.h.ah = 0x00;          /* function 00h = mode set */
@@ -76,8 +74,9 @@ void SwapBuffers()
     memcpy(_videoContext.vga, _videoContext.backBuffer, 320 * 200);
 }
 
-void ClearBuffer(){
-    memset(_videoContext.backBuffer,0,320*200);
+void ClearBuffer()
+{
+    memset(_videoContext.backBuffer, 0, 320 * 200);
 }
 
 void SetPalette(uint8_t index, uint8_t r, uint8_t g, uint8_t b)
@@ -113,6 +112,23 @@ void DrawTile(uint16_t col,
     }
 }
 
+void DrawTileRange(uint16_t col, uint16_t row,
+                   uint16_t cols, uint16_t rows,
+                   uint16_t x, uint16_t y,
+                   uint8_t transparentColor)
+{
+    for (int yy = 0; yy < 8 * rows; yy++)
+    {
+        for (int xx = 0; xx < 8 * cols; xx++)
+        {
+            uint8_t c = _videoContext.tileMemory[(((row * 8) + yy) * 512) + (col * 8) + (xx)];
+            if (c != transparentColor && (y + yy) >= 0 && (y + yy < 200) && (x + xx >= 0) && (x + xx < 320))
+            {
+                _videoContext.backBuffer[((y + yy) * 320) + (x + xx)] = c;
+            }
+        }
+    }
+}
 
 void GetPalette(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b)
 {
@@ -122,40 +138,46 @@ void GetPalette(uint8_t index, uint8_t *r, uint8_t *g, uint8_t *b)
     *b = inp(PALETTE_DATA);
 }
 
-void DrawChar(uint16_t x, uint16_t y, uint8_t c){
+void DrawChar(uint16_t x, uint16_t y, uint8_t c)
+{
     int col = 0;
     int row = 0;
-   
-    if(c >= 'A' && c <='Z'){
-        col= (c-'A')+17;
-        row=0;
+
+    if (c >= 'A' && c <= 'Z')
+    {
+        col = (c - 'A') + 17;
+        row = 0;
     }
-    if(c >= 'a' && c <='z'){
-        col= (c-'a')+17;
-        row=1;
+    if (c >= 'a' && c <= 'z')
+    {
+        col = (c - 'a') + 17;
+        row = 1;
     }
-   const char *row3 = "`1234567890-=[]\\;',./ ";
-   if(strchr(row3,c)){
-       int index = strchr(row3,c)-row3;
-       row = 2;
-       col= index+17;
-   }
-   const char *row4 = "~!@#$%^&*()_+{}|:\"<>?";
-   
-   if(strchr(row4,c)){
-       int index = strchr(row4,c)-row4;
-       row = 3;
-       col= index+17;
-   }
-    DrawTile(col,row,x,y,0);
+    const char *row3 = "`1234567890-=[]\\;',./ ";
+    if (strchr(row3, c))
+    {
+        int index = strchr(row3, c) - row3;
+        row = 2;
+        col = index + 17;
+    }
+    const char *row4 = "~!@#$%^&*()_+{}|:\"<>?";
+
+    if (strchr(row4, c))
+    {
+        int index = strchr(row4, c) - row4;
+        row = 3;
+        col = index + 17;
+    }
+    DrawTile(col, row, x, y, 0);
 }
 
-void DrawString(uint16_t x, uint16_t y, const char *s){
-    for(int i = 0; i < strlen(s); i++){
-        DrawChar(x+(i*8), y, s[i]);
+void DrawString(uint16_t x, uint16_t y, const char *s)
+{
+    for (int i = 0; i < strlen(s); i++)
+    {
+        DrawChar(x + (i * 8), y, s[i]);
     }
 }
-
 
 void LoadTiles(const char *file)
 {
@@ -254,13 +276,27 @@ extern "C"
 
     int L_DrawTile(lua_State *L)
     {
-        double col = lua_tointeger(L, 1);
-        double row = lua_tointeger(L, 2);
-        double x = lua_tointeger(L, 3);
-        double y = lua_tointeger(L, 4);
-        double c = lua_tointeger(L, 5);
+        uint16_t col = lua_tointeger(L, 1);
+        uint16_t row = lua_tointeger(L, 2);
+        uint16_t x = lua_tointeger(L, 3);
+        uint16_t y = lua_tointeger(L, 4);
+        uint16_t c = lua_tointeger(L, 5);
 
         DrawTile(col, row, x, y, c);
+        return 0;
+    }
+
+    int L_DrawTileRange(lua_State *L)
+    {
+        uint16_t col = lua_tointeger(L, 1);
+        uint16_t row = lua_tointeger(L, 2);
+        uint16_t cols = lua_tointeger(L, 3);
+        uint16_t rows = lua_tointeger(L, 4);
+        uint16_t x = lua_tointeger(L, 5);
+        uint16_t y = lua_tointeger(L, 6);
+        uint16_t c = lua_tointeger(L, 7);
+
+        DrawTileRange(col, row, cols, rows, x, y, c);
         return 0;
     }
 
@@ -271,15 +307,17 @@ extern "C"
         return 0;
     }
 
-    int L_DrawString(lua_State *L){
-         double x = lua_tointeger(L, 1);
+    int L_DrawString(lua_State *L)
+    {
+        double x = lua_tointeger(L, 1);
         double y = lua_tointeger(L, 2);
         const char *s = lua_tostring(L, 3);
-        DrawString(x,y,s);
+        DrawString(x, y, s);
         return 0;
     }
 
-    int L_ClearBuffer(lua_State *L){
+    int L_ClearBuffer(lua_State *L)
+    {
         ClearBuffer();
         return 0;
     }
