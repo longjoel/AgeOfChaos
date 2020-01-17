@@ -21,6 +21,8 @@ while #stateStack > 0 do
 
     top.onFrame(state)
 
+    ClearBuffer()
+
     top.onRender(state)
 
     SwapBuffers()
