@@ -17,7 +17,7 @@ local TitleScreen = {
         88,72,
         0)
 
-        local slowFrameCount = 2+( frameCount//1000)
+        local slowFrameCount = 2+( frameCount//100)
         local frame = animationFrames[(slowFrameCount % #animationFrames)+1]
         DrawTileRange(frame.col, frame.row, frame.cols, frame.rows, math.floor(animationX),0,0)
         DrawTileRange(frame.col, frame.row, frame.cols, frame.rows, math.floor(314-animationX),184,0)
@@ -28,7 +28,7 @@ local TitleScreen = {
     onFrame = function(state)
 
         frameCount = frameCount + 1
-        animationX = animationX + (animationDirection * 0.05)
+        animationX = animationX + (animationDirection * 0.5)
 
         if (animationX <=0) then
             animationX = 1
