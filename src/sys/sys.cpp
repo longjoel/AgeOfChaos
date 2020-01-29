@@ -2,6 +2,9 @@
 #include <dpmi.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+#include <stdint.h>
+#include <sys/nearptr.h>
 
 #include "sys.h"
 
@@ -19,4 +22,12 @@ void Log(const char *value){
     fprintf(fptr, value);
     fprintf(fptr, "\n");
     fclose(fptr);
+}
+
+const uint16_t *timerPtr = (uint16_t*)(0x046C + __djgpp_conventional_base);
+
+uint16_t GetTime(){
+    const float fTime = *(timerPtr);
+    const float factor = 18.8f;
+    return (uint16_t)floor( 1000* fTime/factor);
 }

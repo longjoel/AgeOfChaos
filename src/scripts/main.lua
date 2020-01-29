@@ -1,5 +1,4 @@
 -- main
-
 local ReadAll = function(file)
     local f = assert(io.open(file, "rb"))
     local content = f:read("*all")
@@ -14,22 +13,18 @@ local state = {}
 
 local stateStack = {TitleScreen}
 
-Frame = function ()
-    
+Frame = function(t)
+    local top = stateStack[#stateStack]
+
+    top.onFrame(state)
 end
 
-Render = function ()
+Render = function(t)
+    ClearBuffer()
+    local top = stateStack[#stateStack]
+
+    top.onRender(state)
+
+    DrawString(0,0,tostring(t))
+    SwapBuffers()
 end
-
-
--- while #stateStack > 0 do
---     local top = stateStack[#stateStack]
-
---     top.onFrame(state)
-
---     ClearBuffer()
-
---     top.onRender(state)
-
---     SwapBuffers()
--- end

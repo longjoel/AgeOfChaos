@@ -13,15 +13,17 @@
 lua_CFunction frameFunc = nullptr;
 lua_CFunction renderFunc = nullptr;
 
-int L_Log(lua_State *L){
-    const char* message = lua_tostring(L,1);
+int L_Log(lua_State *L)
+{
+    const char *message = lua_tostring(L, 1);
     Log(message);
     return 0;
 }
 
-int L_SetCallbacks(lua_State *L){
-    frameFunc = lua_tocfunction(L,1);
-    renderFunc = lua_tocfunction(L,2);
+int L_SetCallbacks(lua_State *L)
+{
+    frameFunc = lua_tocfunction(L, 1);
+    renderFunc = lua_tocfunction(L, 2);
     return 0;
 }
 
@@ -48,19 +50,20 @@ int main(int nArgs, char **args)
 
     /* Load the file containing the script we are going to run */
     int status = luaL_loadfile(L, "scripts/main.lua");
-    if (status) {
+    if (status)
+    {
         /* If something went wrong, error message is at the top of */
         /* the stack */
         const char *error = lua_tostring(L, -1);
         fprintf(stderr, "Couldn't load file: %s\n", error);
-       // Log(error);
-       // exit(0);
+        // Log(error);
+        // exit(0);
     }
 
-// Register Log functions
-    lua_register(L,"Log",L_Log);
+    // Register Log functions
+    lua_register(L, "Log", L_Log);
 
-// Register video functions
+    // Register video functions
     lua_register(L, "SwapBuffers", L_SwapBuffers);
     lua_register(L, "SetPixel", L_SetPixel);
     lua_register(L, "SetTilePixel", L_SetTilePixel);
@@ -72,28 +75,32 @@ int main(int nArgs, char **args)
 
     // Register input functions
 
-  
     lua_register(L, "PollKeyboard", L_PollKeyboard);
     lua_register(L, "PollMouse", L_PollMouse);
 
     /* Ask Lua to run our little script */
-    int result =lua_pcall(L, 0, LUA_MULTRET, 0);
-    if (result) {
+    int result = lua_pcall(L, 0, LUA_MULTRET, 0);
+    if (result)
+    {
         fprintf(stderr, "Failed to run script: %s\n", lua_tostring(L, -1));
         exit(1);
     }
 
-while(true){
-    lua_getglobal(L,"Frame");
-    lua_call(L,0,0);
+    while (true)
+    {
+        const uint16_t time = GetTime();
+        lua_getglobal(L, "Frame");
+        lua_pushnumber(L, time);
+            lua_call(L, 1, 0);
 
-    lua_getglobal(L,"Render");
-    lua_call(L,0,0);
-}
- 
-    lua_close(L);   /* Cya, Lua */
+        lua_getglobal(L, "Render");
+        lua_pushnumber(L, time);
+        lua_call(L, 1, 0);
+    }
+
+    lua_close(L); /* Cya, Lua */
 
     VideoCleanup();
-    
+
     return 0;
 }

@@ -10,6 +10,8 @@
 #define PALETTE_INDEX 0x03c8
 #define PALETTE_DATA 0x03c9
 #define INPUT_STATUS 0x03da
+#define VRETRACE 0x08
+#define INPUT_STATUS 0x03da
 
 typedef uint8_t byte;
 typedef uint16_t word;
@@ -71,6 +73,10 @@ void SetPixel(uint16_t x, uint16_t y, uint8_t c)
 void SwapBuffers()
 {
     // todo: wait for vsync
+    while ((inp(INPUT_STATUS) & VRETRACE))
+        ;
+    while (!(inp(INPUT_STATUS) & VRETRACE))
+        ;
     memcpy(_videoContext.vga, _videoContext.backBuffer, 320 * 200);
 }
 
