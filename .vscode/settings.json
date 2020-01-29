@@ -9,6 +9,8 @@
         "PollMouse",
         "SwapBuffers",
         "DrawString",
-        "DrawTileRange"
+        "DrawTileRange",
+        "ClearBuffer",
+        "SetCallbacks"
     ]
 }

@@ -14,16 +14,22 @@ local state = {}
 
 local stateStack = {TitleScreen}
 
-
-
-while #stateStack > 0 do
-    local top = stateStack[#stateStack]
-
-    top.onFrame(state)
-
-    ClearBuffer()
-
-    top.onRender(state)
-
-    SwapBuffers()
+Frame = function ()
+    
 end
+
+Render = function ()
+end
+
+
+-- while #stateStack > 0 do
+--     local top = stateStack[#stateStack]
+
+--     top.onFrame(state)
+
+--     ClearBuffer()
+
+--     top.onRender(state)
+
+--     SwapBuffers()
+-- end

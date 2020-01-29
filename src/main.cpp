@@ -10,11 +10,20 @@
 #include "lua/lualib.h"
 #include "lua/lauxlib.h"
 
+lua_CFunction frameFunc = nullptr;
+lua_CFunction renderFunc = nullptr;
+
 int L_Log(lua_State *L){
     const char* message = lua_tostring(L,1);
     Log(message);
+    return 0;
 }
 
+int L_SetCallbacks(lua_State *L){
+    frameFunc = lua_tocfunction(L,1);
+    renderFunc = lua_tocfunction(L,2);
+    return 0;
+}
 
 int main(int nArgs, char **args)
 {
@@ -59,6 +68,7 @@ int main(int nArgs, char **args)
     lua_register(L, "DrawTileRange", L_DrawTileRange);
     lua_register(L, "DrawString", L_DrawString);
     lua_register(L, "ClearBuffer", L_ClearBuffer);
+    lua_register(L, "SetCallbacks", L_SetCallbacks);
 
     // Register input functions
 
@@ -73,6 +83,14 @@ int main(int nArgs, char **args)
         exit(1);
     }
 
+while(true){
+    lua_getglobal(L,"Frame");
+    lua_call(L,0,0);
+
+    lua_getglobal(L,"Render");
+    lua_call(L,0,0);
+}
+ 
     lua_close(L);   /* Cya, Lua */
 
     VideoCleanup();

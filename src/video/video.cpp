@@ -278,8 +278,8 @@ extern "C"
     {
         uint16_t col = lua_tointeger(L, 1);
         uint16_t row = lua_tointeger(L, 2);
-        uint16_t x = lua_tointeger(L, 3);
-        uint16_t y = lua_tointeger(L, 4);
+        uint16_t x = lua_tonumber(L, 3);
+        uint16_t y = lua_tonumber(L, 4);
         uint16_t c = lua_tointeger(L, 5);
 
         DrawTile(col, row, x, y, c);
@@ -292,8 +292,8 @@ extern "C"
         uint16_t row = lua_tointeger(L, 2);
         uint16_t cols = lua_tointeger(L, 3);
         uint16_t rows = lua_tointeger(L, 4);
-        uint16_t x = lua_tointeger(L, 5);
-        uint16_t y = lua_tointeger(L, 6);
+        uint16_t x = lua_tonumber(L, 5);
+        uint16_t y = lua_tonumber(L, 6);
         uint16_t c = lua_tointeger(L, 7);
 
         DrawTileRange(col, row, cols, rows, x, y, c);
