@@ -41,7 +41,7 @@ local TitleScreen = {
         end
 
 
-        if(PollKeyboard()==' ') then
+        if(PollKeyboard()==0x39) then
             state.popState()
         end
 

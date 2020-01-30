@@ -11,6 +11,8 @@
         "DrawString",
         "DrawTileRange",
         "ClearBuffer",
-        "SetCallbacks"
+        "SetCallbacks",
+        "PollKeyboard",
+        "QuitGame"
     ]
 }

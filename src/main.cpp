@@ -13,6 +13,8 @@
 lua_CFunction frameFunc = nullptr;
 lua_CFunction renderFunc = nullptr;
 
+bool isRunning;
+
 int L_Log(lua_State *L)
 {
     const char *message = lua_tostring(L, 1);
@@ -20,10 +22,8 @@ int L_Log(lua_State *L)
     return 0;
 }
 
-int L_SetCallbacks(lua_State *L)
-{
-    frameFunc = lua_tocfunction(L, 1);
-    renderFunc = lua_tocfunction(L, 2);
+int L_QuitGame(lua_State *L){
+    isRunning = false;
     return 0;
 }
 
@@ -71,7 +71,7 @@ int main(int nArgs, char **args)
     lua_register(L, "DrawTileRange", L_DrawTileRange);
     lua_register(L, "DrawString", L_DrawString);
     lua_register(L, "ClearBuffer", L_ClearBuffer);
-    lua_register(L, "SetCallbacks", L_SetCallbacks);
+    lua_register(L,"QuitGame", L_QuitGame);
 
     // Register input functions
 
@@ -86,7 +86,8 @@ int main(int nArgs, char **args)
         exit(1);
     }
 
-    while (true)
+    isRunning = true;
+    while (isRunning == true)
     {
         const uint16_t time = GetTime();
         lua_getglobal(L, "Frame");
@@ -101,6 +102,9 @@ int main(int nArgs, char **args)
     lua_close(L); /* Cya, Lua */
 
     VideoCleanup();
+
+    printf("Thank you for playing Age of Chaos.\n\n");
+    printf("Age of Chaos - code and art by Joel Longanecker.");
 
     return 0;
 }

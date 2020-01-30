@@ -9,37 +9,33 @@ end
 local TitleScreen = load(ReadAll("scripts/tscrn.lua"))()
 TitleScreen.onLoad()
 
-local stateDictionary = {
-    {name='titlescreen', value=TitleScreen}
-};
-
+local stateDictionary = {{name = 'titlescreen', value = TitleScreen}};
 
 local stateStack = {TitleScreen}
 
 local state = {
-    pushState = function (stateName)
+    pushState = function(stateName)
         table.insert(stateStack, stateDictionary[stateName].value)
     end,
 
-    popState = function ()
+    popState = function() stateStack[#stateStack] = nil end
 
-        stateStack[#stateStack] = nil
-    end
-        
 }
-
 
 Frame = function(t)
     local top = stateStack[#stateStack]
 
-    top.onFrame(state)
+    if (top ~= nil) then top.onFrame(state) end
 end
 
 Render = function(t)
     ClearBuffer()
     local top = stateStack[#stateStack]
 
-    top.onRender(state)
-
+    if top == nil then
+        QuitGame()
+    else
+        top.onRender(state)
+    end
     SwapBuffers()
 end

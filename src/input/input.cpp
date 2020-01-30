@@ -5,30 +5,31 @@
 
 uint8_t PollKeyboard(void)
 {
-    union REGS regs;
+    union REGS inRegs;
+    union REGS outRegs;
 
     static bool isInit = false;
 
     if (!isInit)
     {
-        regs.h.al = 0x05;
-        regs.h.ah = 0x03;
-        regs.h.bh = 0x00;
-        regs.h.bl = 0x00;
-        int86(0x16, &regs, &regs); /* do it! */
+        inRegs.h.al = 0x05;
+        inRegs.h.ah = 0x03;
+        inRegs.h.bh = 0x00;
+        inRegs.h.bl = 0x00;
+        int86(0x16, &inRegs, &outRegs); /* do it! */
 
         isInit = true;
     }
 
-    regs.h.ah = 0x01;
-    int86(0x16, &regs, &regs); /* do it! */
+    inRegs.h.ah = 0x01;
+    int86(0x16, &inRegs, &outRegs); /* do it! */
 
-    int key = regs.h.ah;
+    int key = outRegs.h.ah;
 
     if (key != 0 && key != 1)
     {
-        regs.h.ah = 0x00;
-        int86(0x16, &regs, &regs); /* do it! */
+        inRegs.h.ah = 0x00;
+        int86(0x16, &inRegs, &outRegs); /* do it! */
     }
     return key;
 }
