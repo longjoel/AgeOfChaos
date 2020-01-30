@@ -9,9 +9,25 @@ end
 local TitleScreen = load(ReadAll("scripts/tscrn.lua"))()
 TitleScreen.onLoad()
 
-local state = {}
+local stateDictionary = {
+    {name='titlescreen', value=TitleScreen}
+};
+
 
 local stateStack = {TitleScreen}
+
+local state = {
+    pushState = function (stateName)
+        table.insert(stateStack, stateDictionary[stateName].value)
+    end,
+
+    popState = function ()
+
+        stateStack[#stateStack] = nil
+    end
+        
+}
+
 
 Frame = function(t)
     local top = stateStack[#stateStack]
@@ -25,6 +41,5 @@ Render = function(t)
 
     top.onRender(state)
 
-    DrawString(0,0,tostring(t))
     SwapBuffers()
 end
