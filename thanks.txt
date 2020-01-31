@@ -1,0 +1,2 @@
+Soundblaster audio code ....... Joel H. Hunter jhunter@kendaco.telebyte.net
+VGA Graphics .................. David Brackeen http://www.brackeen.com/
